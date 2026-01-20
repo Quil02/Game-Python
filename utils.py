@@ -1,4 +1,5 @@
 import os
+import sys
 
 
 # clear terminal
@@ -9,8 +10,8 @@ def clear():
         os.system("cls")
 
 
-# option after game
-def option_after_game(menu, clear):
+# option_after_game
+def option_after_game():
     while True:
         print()
         print("1.Kembali ke menu")
@@ -21,7 +22,8 @@ def option_after_game(menu, clear):
         if pilihan == "1":
             return
         elif pilihan == "q":
-            break
+            clear()
+            sys.exit()
         else:
-            clear
+            clear()
             print("Input anda tidak valid")

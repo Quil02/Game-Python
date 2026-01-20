@@ -1,5 +1,6 @@
-from ..utils import clear
+from utils import clear, option_after_game
 from random import randint
+from sys import exit
 
 
 # logika game
@@ -7,40 +8,45 @@ def input_number():
     print("Semua nya harus berupa number\n")
     while True:
         try:
-            ft = int(input("Number minimal : "))
-            lt = int(input("Number Maksimal : "))
-            pn = int(input("Maksimal percobaan : "))
-            nr = int(input("Number yang harus di tebak : "))
+            first = int(input("Number minimal : "))
+            last = int(input("Number Maksimal : "))
+            percobaan = int(input("Maksimal percobaan : "))
+            number = int(input("Number yang harus di tebak : "))
 
         except ValueError:
             clear()
             print("Anda Memasukan input yang SALAH! coba lagi")
         else:
-            return ft, lt, pn, nr
+            return first, last, percobaan, number
 
 
 def number_generator(first, last, percobaan, number=0):
-    # Function untuk menghasilkan angka acak atau di inpit sendiri
-    if number == 0:
-        number = randint(first, last)
-        return first, last, percobaan, number
+    while True:
+        if number == 0:
+            number = randint(first, last)
+            return first, last, percobaan, number
 
-    elif number != 0:
-        if first > number:
-            clear()
-            print("Number minimal lebih besar dari number yang harus di tebak")
-            print("Silahkan buat ulang\n")
-            ft, lt, pn, nr = input_number()
-            number_generator(ft, lt, pn, nr)
+        elif number != 0:
+            if first > number:
+                clear()
+                print("Number minimal lebih besar dari number yang harus di tebak")
+                print("Silahkan buat ulang\n")
+                first, last, percobaan, number = input_number()
 
-        elif last < number:
-            clear()
-            print("Number Maksimal lebih kecil dari number yang harus di tebak")
-            print("Silahkan buat ulang\n")
-            ft, lt, pn, nr = input_number()
-            number_generator(ft, lt, pn, nr)
+            elif last < number:
+                clear()
+                print("Number Maksimal lebih kecil dari number yang harus di tebak")
+                print("Silahkan buat ulang\n")
+                first, last, percobaan, number = input_number()
 
-    return first, last, percobaan, number
+            elif first > last:
+                clear()
+                print("Nilai Min dan Max terbalik")
+                print("Silahkan buat ulang\n")
+                first, last, percobaan, number = input_number()
+
+            else:
+                return first, last, percobaan, number
 
 
 def game(first, last, percobaan, number):
@@ -67,12 +73,14 @@ def game(first, last, percobaan, number):
             elif tebakan == number:
                 clear()
                 print(f"Selamat Anda menang nomor yang di sembutikan adalah {number}")
-                break
+                option_after_game()
+                return
 
         elif percobaan == 0:
             clear()
             print(f"Anda kalah nomer yang di sembunyikan adalah {number}")
-            break
+            option_after_game()
+            return
 
 
 # menu game
@@ -84,6 +92,9 @@ def menu():
         print("2. 1-10")
         print("3. 1-100")
         print("4. 1-1000\n")
+        print("===Pilihan lain nya")
+        print("b. Kembali ke menu utama")
+        print("q. Keluar dari permainan")
 
         menu_option = input("Masukan Pilihan : ")
 
@@ -106,6 +117,10 @@ def menu():
             clear()
             game(*number_generator(1, 1000, 7))
             break
+        elif menu_option == "b":
+            return
+        elif menu_option == "q":
+            exit()
         else:
             print("Input Anda tidak Valid")
             input("Click Apapun untuk melanjutkan...")

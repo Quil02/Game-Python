@@ -1,4 +1,4 @@
-from utils import clear
+from utils import clear, option_after_game
 from .Data import hangman, words, sentences
 from random import randint
 
@@ -41,10 +41,13 @@ def playgames(kata):
             clear()
             print(hangman[hangman_image])
             print("".join(close_kata))
-            print(f"huruf salah ({", ".join(huruf_salah)})")
-            print(f"huruf benar ({", ".join(huruf_benar)})")
+            print(f"huruf salah ({', '.join(huruf_salah)})")
+            print(f"huruf benar ({', '.join(huruf_benar)})")
             print(f"Sisa percobaan anda {percobaan}")
-            tebakan = input("Masukan tebakan dari angka a-z : ")
+            tebakan = input("Masukan tebakan dari angka a-z : ").lower()
+            if len(tebakan) != 1 or not tebakan.isalpha():
+                print("Masukan 1 huruf saja dan itu harus huruf")
+                continue
             index = find_index(kata, tebakan)
 
             if index:
@@ -59,6 +62,7 @@ def playgames(kata):
                     print(hangman[hangman_image])
                     print("".join(close_kata))
                     print("selamat anda menang")
+                    option_after_game()
                     break
 
             else:
@@ -72,57 +76,45 @@ def playgames(kata):
             clear()
             print(hangman[hangman_image])
             print(f"Kata yang di sembunyikan adalah : \n{kata}")
-            print("anda kalah")
+            print("Anda kalah what a shame")
+            option_after_game()
             break
 
 
 # Menu game
 
 
-def about():
-    print("=====About The Game=====\n")
-    print("===Tentang Hangman===")
-    print(
-        "Game Hangman adalah permainan tebak kata di mana satu\npemain (atau komputer) memikirkan sebuah kata, dan pemain\nlainnya mencoba menebak kata tersebut huruf demi huruf\ndalam jumlah kesempatan yang terbatas."
-    )
-
-    back = input("masukan (b) untuk kembali : ")
-    if back == "b":
-        clear()
-        menu()
-    else:
-        print("goblog")
-
-
 def menu():
-    clear()
-    print("===Hangman===\n")
-    print("===Play option===")
-    print("1.Membuat kata sendiri")
-    print("2.Tebak kalimat")
-    print("3.Tebak Kata\n")
-    print("===About game===")
-    print("?.tentang game\n")
-    print("Pilihlah salah satu dari menu di atas")
+    while True:
+        clear()
+        print("===Hangman===")
+        print("1. Membuat kata sendiri")
+        print("2. Tebak kalimat")
+        print("3. Tebak Kata\n")
+        print("===Option lain nya===")
+        print("b. Kembali ke menu utama")
+        print("q. Keluar dari permainan\n")
 
-    menu_option = input("(1/2/3/?) : ")
+        menu_option = input("(1-3/b/q) : ")
 
-    if menu_option == "1":
-        clear()
-        kata = input("Kalimat untuk di tebak : ")
-        playgames(kata)
-    elif menu_option == "2":
-        clear()
-        playgames(random(sentences))
-    elif menu_option == "3":
-        clear()
-        playgames(random(words))
-    elif menu_option == "?":
-        clear()
-        about()
-    else:
-        print("Option tidak valid coba lagi")
-        menu()
+        if menu_option == "1":
+            clear()
+            kata = input("Kalimat untuk di tebak : ").lower()
+            playgames(kata)
+        elif menu_option == "2":
+            clear()
+            playgames(random(sentences))
+        elif menu_option == "3":
+            clear()
+            playgames(random(words))
+        elif menu_option == "b":
+            clear()
+            return
+        elif menu_option == "q":
+            clear()
+            exit()
+        else:
+            print("Option tidak valid coba lagi")
 
 
 if __name__ == "__main__":
